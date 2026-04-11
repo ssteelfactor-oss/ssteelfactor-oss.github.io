@@ -3,10 +3,10 @@
 Before writing any code, it is useful to consider a question that most COM tutorials never address: where does the Running Object Table actually reside?
 The ROT is not a data structure inside the calling process, nor is it a kernel object. 
 
-It exists as a global, session-scoped table inside rpcss.exe — the RPC Subsystem process — and is shared by all processes running in the same Windows session.
-When code calls GetRunningObjectTable(), it does not receive a direct pointer to the table. Instead, it receives a proxy object that implements the IRunningObjectTable interface. Every method invoked on this proxy is marshaled across a local RPC channel (ALPC) to rpcss.exe. The actual mapping of monikers to live objects never leaves that system process.
+It exists as a global, session-scoped table inside rpcss.exe, the RPC Subsystem process, and is shared by all processes running in the same Windows session.
+When code calls GetRunningObjectTable() func, it does not receive a direct pointer to the table. Instead, it receives a proxy object that implements the IRunningObjectTable interface. Every method invoked on this proxy is marshaled across a local RPC channel (ALPC) to rpcss.exe. The actual mapping of monikers to live objects never leaves that system process.
 
-As a result, every ROT operation — Register, Revoke, IsRunning, GetObject, and the rest — is an inter-process call. The overhead is insignificant for occasional use, but it must be taken into account when these functions are invoked inside tight loops or performance-critical code.
+As a result, every ROT operation: Register, Revoke, IsRunning, GetObject, etc is an inter-process call. The overhead is insignificant for occasional use, but it must be taken into account when these functions are invoked inside tight loops or performance-critical code.
 
 **The API chain**
 The full enumeration path will be looks like this:
