@@ -1,7 +1,7 @@
 **Part 2: How It Works Under the Hood**
 
-Before writing any code, it is useful to consider a question that most COM tutorials never address: where does the Running Object Table actually reside?
-The ROT is not a data structure inside the calling process, nor is it a kernel object. 
+Before diggin into, it's useful to consider a question that most COM tutorials never address: where does the Running Object Table actually reside?
+The ROT isnt a data structure inside the calling process, nor is it a kernel object. 
 
 It exists as a global, session-scoped table inside rpcss.exe, the RPC Subsystem process, and is shared by all processes running in the same Windows session.
 When code calls GetRunningObjectTable() func, it does not receive a direct pointer to the table. Instead, it receives a proxy object that implements the IRunningObjectTable interface. Every method invoked on this proxy is marshaled across a local RPC channel (ALPC) to rpcss.exe. The actual mapping of monikers to live objects never leaves that system process.
@@ -23,15 +23,15 @@ HRESULT hr = 0;
 IRunningObjectTable *pROT = 0;
 hr = GetRunningObjectTable(0, &pROT);
 ````
-GetRunningObjectTable()- the entry point. The first argument is reserved and must be zero. On success it gives you IRunningObjectTable — your proxy to rpcss.exe. Always check SUCCEEDED(hr) before proceeding; if the RPC channel to rpcss is broken, it fails.
+Entry point - GetRunningObjectTable(). 1-argument is reserved and must be zero. On success it gives you IRunningObjectTable, proxy to rpcss.exe. Always check SUCCEEDED(hr) before proceeding; if the RPC channel to rpcss is broken, it fails.
 
 **Step 2: Get an enumerator**
 ````c
 IEnumMoniker *pEnum = 0;
 hr = pROT->lpVtbl->EnumRunning(pROT, &pEnum);
 ````
-EnumRunning() returns IEnumMoniker — a standard COM enumerator over the monikers currently registered in the table. 
-This is a snapshot: entries registered after this call won't appear, entries revoked before you iterate won't be missing from the snapshot either — the enumerator captures state at the moment of the call.
+EnumRunning() returns IEnumMoniker, a standard COM enumerator over the monikers currently registered in the table. 
+This is a snapshot: entries registered after this call won't appear, entries revoked before you iterate won't be missing from the snapshot either - enumerator captures state at the moment of the call.
 
 **Step 3: Iterate**
 ````c
@@ -44,7 +44,7 @@ while (pEnum->lpVtbl->Next(pEnum, 1, &pMon, &fetched) == S_OK) {
 }
 ````
 Next() func follows the standard COM enumerator contract: request items, get back how many were actually returned. 
-Ask for one at a time — simpler error handling, no batch allocation. 
+Ask for one at a time it's simpler error handlingn. 
 
 **Step 4: Decode the moniker**
 ````c
