@@ -26,7 +26,7 @@ GetRunningObjectTable()- the entry point. The first argument is reserved and mus
 
 **Step 2: Get an enumerator**
 ````c
-cIEnumMoniker *pEnum = 0;
+IEnumMoniker *pEnum = 0;
 hr = pROT->lpVtbl->EnumRunning(pROT, &pEnum);
 ````
 EnumRunning() returns IEnumMoniker — a standard COM enumerator over the monikers currently registered in the table. 
@@ -34,7 +34,7 @@ This is a snapshot: entries registered after this call won't appear, entries rev
 
 **Step 3: Iterate**
 ````c
-cIMoniker *pMon = 0;
+IMoniker *pMon = 0;
 ULONG fetched = 0;
 
 while (pEnum->lpVtbl->Next(pEnum, 1, &pMon, &fetched) == S_OK) {
@@ -47,7 +47,7 @@ Ask for one at a time — simpler error handling, no batch allocation.
 
 **Step 4: Decode the moniker**
 ````c
-cIBindCtx *pCtx = 0;
+IBindCtx *pCtx = 0;
 CreateBindCtx(0, &pCtx);
 
 LPOLESTR displayName = 0;
