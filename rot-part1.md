@@ -7,4 +7,4 @@ The ROT is a system-wide registry of live COM objects. Aint classes or factories
 This matters more than it sounds. The ROT is the mechanism behind GetObject() in VBScript, the reason Visual Studio exposes its automation object to external scripts, and the reason certain IPC patterns in Windows work without any explicit socket or pipe setup. It is also, as let's see, a surface that is easy to misunderstand and occasionally to abuse.
 In this post i'll try to explore the ROT from the ground up — in C, without ATL, without MFC, without training wheels. We'll enumerate what's actually registered on a live Windows system, decode the monikers i find, and talk about what the results reveal about COM's runtime model.
 
-![ROT COM Architecture](rot_com_architecture.png)
+![ROT COM Architecture](rot_com_architecture.jpg)
