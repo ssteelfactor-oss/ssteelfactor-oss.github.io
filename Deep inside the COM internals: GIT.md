@@ -1,6 +1,3 @@
----
-title: "Hunting the COM Global Interface Table (GIT)"
----
 
 **Hunting the COM Global Interface Table (GIT): a tiny story from process memory**
 
