@@ -30,11 +30,11 @@ So we have: the call arrives over LPC, but its delivery is **woven into the mess
 
 I thought this was rock bottom, but then someone knocked from below.
 
-![Ghidra disassembly](PeekRPCAndDDEMessage.png)
+![Ghidra disassembly](/PeekRPCAndDDEMessage.png)
 
 The `PeekRPCAndDDEMessage` call, through the wrapper `CCliModalLoop::MyPeekMessage`, invokes `PeekMessageW` (`PM_REMOVE`) + `DispatchMessageW` — exactly the same two calls as in any textbook `while (GetMessage()) DispatchMessage()` of any GUI.
 
-![Ghidra disassembly](PeekMessage.png)
+![Ghidra disassembly](/PeekMessage.png)
 
 So where's the catch, you ask?
 
