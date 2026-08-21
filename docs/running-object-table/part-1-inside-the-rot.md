@@ -1,0 +1,17 @@
+---
+title: Inside the Running Object Table
+date: 2026-06-05
+---
+
+# Inside the Running Object Table
+
+**Introduction:** Running Object Table, part I
+
+COM is a technology that many developers believe they understand until they encounter its less-documented internals. Most are familiar with the core concepts — interfaces, CoCreateInstance, and reference counting — yet the Component Object Model contains considerably more supporting infrastructure than its public API reveals. One of the least examined parts of this infrastructure is the Running Object Table, commonly abbreviated as ROT.
+
+The ROT is a system-wide registry that holds references to live COM objects. It does not store class information or factory objects; it contains only instantiated objects that have been explicitly registered as running and available for external access. In essence, it serves as the mechanism by which a COM server can declare that a particular object is active and can be located by name. A client that needs to connect to an already-running instance checks the ROT before creating a new object.
+
+This component plays a more important role than is commonly recognized. The ROT is the underlying mechanism used by GetObject() in VBScript, it enables Visual Studio to expose its automation model to external scripts, and it supports certain inter-process communication patterns in Windows without the need for explicit sockets or named pipes. At the same time, the ROT is an area that is frequently misunderstood and can be misused.
+
+In this article the Running Object Table is examined from first principles in plain C, without any complicated techs like ATL, MFC, or any other framework abstractions. The discussion covers enumeration of the objects currently registered on a live Windows system, decoding of the monikers they expose, and analysis of what these findings indicate about the runtime behavior of COM.
+![ROT COM Architecture](../assets/images/rot_com_architecture.jpg)
