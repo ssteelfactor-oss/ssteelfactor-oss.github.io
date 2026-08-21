@@ -1,27 +1,41 @@
 ---
-title: The Running Object Table
+title: Home
 ---
 
-# The Running Object Table
+# Windows internals, from first principles
 
-The ROT is a system-wide registry that holds references to live COM objects.
-It is the mechanism behind `GetObject()` in VBScript, behind Visual Studio's
-automation model, and behind several inter-process patterns in Windows that use
-neither sockets nor named pipes. It is also one of the least examined parts of
-COM's supporting infrastructure.
+Notes from taking Windows apart in plain C — no ATL, no MFC, no framework
+abstractions between the code and the mechanism. Most of what follows started as a
+question the documentation did not answer, and ended in a disassembler.
 
-This series works through it in plain C, starting from the public API and ending
-inside `rpcss.dll`.
+<div class="grid cards" markdown>
 
-| Part | Subject |
-| --- | --- |
-| [Part 1](part-1-inside-the-rot.md) | What the ROT is, and what it is not |
-| [Part 2](part-2-under-the-hood.md) | Where the table actually lives, and what every call costs |
-| Part 3 | Decoding monikers *(not yet published)* |
-| [Part 4](part-4-reversing-rpcss.md) | Recovering the internal layout with Ghidra |
+-   __The Running Object Table__
 
-!!! note "Part 3"
+    ---
 
-    Part 3 is referenced by Part 4 but is not in the repository. Add
-    `part-3-*.md` to this folder and a line to `nav:` in `mkdocs.yml` when it is
-    ready.
+    A system-wide registry of live COM objects that lives inside `rpcss.exe`.
+    Four parts: what it is, how the proxy reaches it, and how its internal layout
+    was recovered from `rpcss.dll` without a kernel debugger.
+
+    [Read the series](running-object-table/index.md)
+
+-   __Apartments and the message pump__
+
+    ---
+
+    Why a WinForms or WPF thread can deadlock on a mechanism nobody wrote,
+    nobody sees, and — apparently — nobody uses. The answer involves DDE
+    handling from 1993.
+
+    [Read the article](apartments/com-sta-deadlock.md)
+
+</div>
+
+## About
+
+I research Windows internals — COM, DCOM, RPC, marshaling — and build small,
+dependency-free tools in C to test what the research claims. Everything here is
+written against live systems and verified in a debugger before it is published.
+
+Code lives on [GitHub](https://github.com/ssteelfactor-oss).
